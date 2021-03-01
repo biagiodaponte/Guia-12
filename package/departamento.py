@@ -21,7 +21,4 @@ class Departamento():
         return ''
 
     def __str__(self):
-        print(f'---DEPARTAMENTO DE {(self.nombre).upper()}---\n')
-        for emple in self.lista_empleados:
-            print(f'{emple}\n')
-        return ''
+        return f'Departamento {self.nombre} - Telefono: {self.telefono}'

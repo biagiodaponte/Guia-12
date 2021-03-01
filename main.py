@@ -1,107 +1,93 @@
+# EJEMPLO DE MANEJO  DE REPOSITORIOS Y CLASES POR MEDIO DE PAQUETES
 
-from package.persona import Persona
-from package.usuario import Usuario
+from os import system
 from package.empleado import Empleado
 from package.departamento import Departamento
-from package.gerencia import Gerencia
-
-import csv
-
-path = 'C:/Users/biagi/Desktop/Master Python/EJERCICIOS'
-
-csv_empleados = open( path+'/empleados.csv', 'r', encoding='utf-8')
-csv_departamentos = open (path+'/departamentos.csv', 'r', encoding='utf-8')
-
-empleados = dict()
-departamentos = dict()
-def cargaTodo():
-    lectura_empleados = csv.reader(csv_empleados)
-    def crearEmpleados():
-        #% Creacion de Todos los Empleados
-        for fila in lectura_empleados:
-            empleados[fila[4]]= Empleado(fila[0], fila[1], fila[2], fila[4], fila[3], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10])
-        #% FIN Creacion de Todos los Empleados
-    crearEmpleados()
-
-    
-    def crearDepartamentos():
-        #% CREACION DE TODOS LOS DEPARTAMENTOS CON SUS EMPLEADOS
-        lectura_departamentos = csv.reader(csv_departamentos)
-        for fila in lectura_departamentos:
-            departamentos[fila[0]] = Departamento(fila[0], fila[1])
-        for emple in empleados.values():
-            departamentos[emple.departamento].lista_empleados.append(emple)
-        #% FIN CREACION DE TODOS LOS DEPARTAMENTOS CON SUS EMPLEADOS
-    crearDepartamentos()
-    csv_empleados.close()
-cargaTodo()
-
-# #% IMPRESION DE TODOS LOS EMPLEADOS
-def imprimeEmpleados():
-    for emple in empleados.values():
-        print(f'{emple}\n')
-# imprimeEmpleados()
-
-#! IMPRESION DE DETALLE DE EMPLEADOS POR DEPARTAMENTO
-print(departamentos['Soporte'])
 
 
-def menu():
-    def menu1():
-        print(f'''Seleccione con qué opción desea Trabajar:
-a) Departamentos
-b) Empleados''')
-        global opcion1
-        opcion1 = input('Escriba Opción: ').lower()
-        while not (opcion1 == 'a' or opcion1 == 'b'):
-            opcion1 = input('Opción Incorrecta. Escriba Opción: ')
-        else:
-            pass
+def pausa():
+    input('Presione enter para continuar...') 
 
-        if opcion1 == 'a':
-            opcion1 = 'Departamentos'
-        else:
-            opcion1 = 'Empleados'
-    menu1()
+def opcion_1(dict_departamentos):
+    print('opcion 1 - Departameno - Create')
+    obj_dep = Departamento('RRHH', '633522411')
+    print(obj_dep)
+    # DICCIONARIO
+    if not obj_dep.nombre in dict_departamentos.keys():
+        dict_departamentos[obj_dep.nombre] = obj_dep
+    else:
+        print('Departamento ya Existe')
+    pausa()
 
-    #% MENÚ PARTE 2
-    def menu2():
-        print(f'''\nSeleccione una acción para manejar los {opcion1}:
-C) Crear un Objeto
-R) Consultar Existencia
-U) Editar Datos
-D) Eliminar Objeto''')
-        opcion2 = input('Escriba Opción: ').lower()
-        while not (opcion2 == 'c' or opcion2 == 'r' or opcion2 == 'u' or opcion2 == 'd'):
-            opcion2 = input('Opción Incorrecta. Escriba Opción: ')
-        else:
-            pass
+def opcion_2():
+    print('opcion 2 - Departameno - Read')
+    pausa()
 
-        #% CREAR OBJETO
-        if opcion2 == 'c':
-            if opcion1 == 'Departamentos':
-                csv_empleados = open(path+'/departamentos.csv', 'r', encoding='utf-8')
-                lectura_empleados = csv.reader(csv_empleados)
-                departamentos_exist = list()
-                for fila in lectura_empleados:
-                    departamentos_exist.append(fila[0])
-                print(departamentos_exist)
+def opcion_3():
+    print('opcion 3 - Departameno - Update')
+    pausa()
 
-                nuevo_departamento = input('Ingrese Nombre del nuevo Departamento: ')
-                while nuevo_departamento in departamentos_exist:
-                    nuevo_departamento = input('Ingrese Nombre del nuevo Departamento: ')
-                else:
-                    pass
-                telefono = input('Ingrese Telefono del nuevo Departamento: ')
-                with open(path+'/departamentos.csv', 'w') as dep_writer:
-                    writer = csv.writer(dep_writer)
-                    writer.writerow(nuevo_departamento, telefono)
-                dep_writer.close()
-    menu2()
-# menu()
+def opcion_4():
+    print('opcion 4 - Departameno - Delete')
+    pausa()
+
+def opcion_5():
+    print('opcion 5 - Empleado - Create')
+    objeto_empleado = Empleado('Biagio', 'Daponte', '30-09-1999', 'Y8333427N', 'Gral Diaz Porlier 24', 'biagio', 'bvdm1999', True, 1500,'15:00-23:00')
+    print(objeto_empleado)
+    nombre_departamento = input('Agregue Departamento: ')
+    pausa()
+
+def opcion_6():
+    print('opcion 6')
+    pausa()
+
+def opcion_7():
+    print('opcion 7')
+    pausa()
+
+def opcion_8():
+    print('opcion 8')
+    pausa()
 
 
-# # print(depto_1.mediaSalarial())
 
-# print(depto_1.mediaSalarial())
-# print(depto_1.reporteDepto())
+def main():
+
+    lista_departamentos = list()
+    dict_departamentos = dict()
+
+    salida = True
+    while salida == True:
+        system('clear') # system('cls') 
+
+        print('--- TITULO MENU ---')
+        print('1. opcion - Departamento - Create ')
+        print('2. opcion - Departamento - Read ')
+        print('3. opcion - Departamento - Update ')
+        print('4. opcion - Departamento - Delete ')
+        print('5. opcion - Empleado - Create')
+        print('6. opcion - Empleado - Read')
+        print('7. opcion - Empleado - Update')
+        print('8. opcion - Empleado - Delete')
+
+        opcion = input('selecione una:')
+
+        if   opcion == '1': opcion_1(dict_departamentos) #Departamento - Create
+        elif opcion == '2': opcion_2() #Departamento - Read  
+        elif opcion == '3': opcion_3() #Departamento - Update
+        elif opcion == '4': opcion_4() #Departamento - Delete
+        elif opcion == '5': opcion_5(dict_empleados) #Empleado - Create
+        elif opcion == '6': opcion_6() #Empleado - Read
+        elif opcion == '7': opcion_7() #Empleado - Update
+        elif opcion == '8': opcion_8() #Empleado - Delete
+        elif opcion == '0': 
+            print('Adios...')
+            pausa()
+            salida = False
+        else: 
+            print('la opcion seleccionada no se encuentra dispobible, intente nuevamente')
+            pausa()
+
+
+main()
