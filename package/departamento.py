@@ -3,7 +3,7 @@ class Departamento():
     def __init__(self, nombre, telefono):
         self.nombre = nombre
         self.telefono = telefono
-        self.lista_empleados = list()
+        self.empleados = dict()
 
     def mediaSalarial(self):
         salario_depto = 0
