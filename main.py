@@ -3,6 +3,7 @@
 from os import system
 from package.empleado import Empleado
 from package.departamento import Departamento
+from package.gerencia import Gerencia
 
 dict_departamentos = dict()
 
@@ -11,7 +12,9 @@ def pausa():
 
 def opcion_1(dict_departamentos):
     print('opcion 1 - Departameno - Create')
-    obj_dep = Departamento('RRHH', '633522411')
+    nombre = input('Ingrese Nombre del Departamento: ')
+    telefono = input('Ingrese Telefono del Departamento: ')
+    obj_dep = Departamento(nombre, telefono)
     print(obj_dep)
     # DICCIONARIO
     if not obj_dep.nombre in dict_departamentos.keys():
@@ -28,8 +31,27 @@ def opcion_2(dict_departamentos):
             print(emple)
     pausa()
 
-def opcion_3():
+def opcion_3(dict_departamentos):
     print('opcion 3 - Departameno - Update')
+    if len(dict_departamentos) == 0:
+        print('No existen departamentos.')
+    else:
+        nombre_departamento = input('Ingrese nombre del departamento a Editar: ')
+        if nombre_departamento  in dict_departamentos.keys():
+            atributo = input('Ingrese el atributo a Editar: ')
+            if atributo in ['nombre', 'telefono']:
+                valor = input(f'Ingrese el nuevo valor para {atributo}: ')
+                if atributo == 'nombre':
+                    dep_eliminado = dict_departamentos.pop(nombre_departamento)
+                    dict_departamentos[valor] = dep_eliminado
+                    setattr(dict_departamentos[valor], atributo, valor)
+                elif atributo == 'telefono':
+                    setattr(dict_departamentos[nombre_departamento], atributo, valor)
+                print(f'El {atributo} fue modificado correctamente.')
+            else:
+                print('El atributo no existe.')
+        else:
+            print('El departamento no existe.')
     pausa()
 
 def opcion_4(dict_departamentos):
@@ -78,11 +100,25 @@ def opcion_6(dict_departamentos):
 
     pausa()
 
-def opcion_7():
+def opcion_7(dict_departamentos):
     print('opcion 7')
+    emple_dni = input('Ingrese DNI de Empleado a Modificar: ')
+    atributo = input('Ingrese atributo a modificar: ')
+    if atributo == 'dni':
+        print('El atributo DNI no se puede modificar.')
+    else:
+        valor = input(f'Ingrese nuevo valor para el atributo {atributo}: ')
+    if atributo in ['nombre', 'apellido', 'fecha_de_nacimiento', 'direccion', 'usuario', 'clave', 'activo', 'salario', 'horario']:
+        if atributo == 'salario':
+            valor = float(valor)
+        
+        for depa in dict_departamentos.values():
+            if emple_dni in depa.empleados.keys():
+                setattr(depa.empleados[emple_dni], atributo, valor)
+                print(f'Empleado modificado correctamente en el departamento {depa.nombre}')
     pausa()
 
-def opcion_8():
+def opcion_8(dict_departamentos):
     print('opcion 8')
     dni_empleado = input('Ingrese el DNI del Empleado a ELIMINAR: ')
     for depa in dict_departamentos.values():
@@ -96,6 +132,8 @@ def opcion_8():
 
 
 def main():
+
+    gerencia = Gerencia('Dentosmed')
 
     salida = True
     while salida == True:
@@ -113,14 +151,14 @@ def main():
 
         opcion = input('selecione una:')
 
-        if   opcion == '1': opcion_1(dict_departamentos) #Departamento - Create
-        elif opcion == '2': opcion_2(dict_departamentos) #Departamento - Read  
-        elif opcion == '3': opcion_3() #Departamento - Update
-        elif opcion == '4': opcion_4(dict_departamentos) #Departamento - Delete
-        elif opcion == '5': opcion_5(dict_departamentos) #Empleado - Create
-        elif opcion == '6': opcion_6(dict_departamentos) #Empleado - Read
-        elif opcion == '7': opcion_7() #Empleado - Update
-        elif opcion == '8': opcion_8() #Empleado - Delete
+        if   opcion == '1': opcion_1(gerencia.departamentos) #Departamento - Create
+        elif opcion == '2': opcion_2(gerencia.departamentos) #Departamento - Read  
+        elif opcion == '3': opcion_3(gerencia.departamentos) #Departamento - Update
+        elif opcion == '4': opcion_4(gerencia.departamentos) #Departamento - Delete
+        elif opcion == '5': opcion_5(gerencia.departamentos) #Empleado - Create
+        elif opcion == '6': opcion_6(gerencia.departamentos) #Empleado - Read
+        elif opcion == '7': opcion_7(gerencia.departamentos) #Empleado - Update
+        elif opcion == '8': opcion_8(gerencia.departamentos) #Empleado - Delete
         elif opcion == '0': 
             print('Adios...')
             pausa()
