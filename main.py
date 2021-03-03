@@ -1,11 +1,11 @@
 # EJEMPLO DE MANEJO  DE REPOSITORIOS Y CLASES POR MEDIO DE PAQUETES
-
 from os import system
 from package.empleado import Empleado
 from package.departamento import Departamento
 from package.gerencia import Gerencia
+import csv
 
-dict_departamentos = dict()
+# dict_departamentos = dict()
 
 def pausa():
     input('Presione enter para continuar...') 
@@ -80,23 +80,11 @@ def opcion_5(dict_departamentos):
     pausa()
 
 def opcion_6(dict_departamentos):
-    print('opcion 6')
-    # nombre_departamento = input('Agregue el Departamento del Empleado: ')
-    # if nombre_departamento in dict_departamentos.keys():
-    #     dni_empleado = input('Ingrese el DNI del Empleado: ')
-    #     if dni_empleado in dict_departamentos[nombre_departamento].empleados.keys():
-    #         print(dict_departamentos[nombre_departamento].empleados[dni_empleado])
-    #     else:
-    #         print('El empleado no existe en el Departamento')
-    # else:
-    #     print('El departamento no Existe')
-    
+    print('opcion 6')   
     dni_empleado = input('Ingrese el DNI del Empleado: ')
     for depa in dict_departamentos.values():
         if dni_empleado in depa.empleados.keys():
             print(f'{depa.nombre}: {depa.empleados[dni_empleado]}')
-        else:
-            print('El empleado no existe en la empresa.')
 
     pausa()
 
@@ -134,6 +122,30 @@ def opcion_8(dict_departamentos):
 def main():
 
     gerencia = Gerencia('Dentosmed')
+
+    path = 'C:/Users/biagi/Desktop/Master Python/GUIA12-REPO/Guia-12/'
+    # Apertura del Archivo
+    fichero_departamentos = open(path + 'departamentos.csv', 'r', encoding='utf-8')
+    fichero_empleados = open(path + 'empleados.csv', 'r', encoding='utf-8')
+
+    # Transformación del archivo csv a lineas de listas
+    lectura_departamentos = csv.reader(fichero_departamentos)
+    #% CREACION DE DEPARTAMENTOS
+    for fila in lectura_departamentos:
+        obj_departamento = Departamento(fila[0].upper(), fila[1])
+        if not obj_departamento.nombre in gerencia.departamentos.keys():
+            gerencia.departamentos[obj_departamento.nombre] = obj_departamento
+    print(gerencia.departamentos)
+    # Cierre del fichero (debe ser luego de la transormacion del archivo).
+    fichero_departamentos.close()
+
+    #% CREACION DE EMPLEADOS
+    lectura_empleados = csv.reader(fichero_empleados)
+    for fila in lectura_empleados:
+        obj_empleado = Empleado(fila[0], fila[1], fila[2], fila[4], fila[3], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10])
+        if obj_empleado.departamento in gerencia.departamentos.keys():
+            gerencia.departamentos[obj_empleado.departamento].empleados[obj_empleado.dni] = obj_empleado
+
 
     salida = True
     while salida == True:
