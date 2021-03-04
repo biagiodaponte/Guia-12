@@ -28,7 +28,7 @@ def opcion_2(dict_departamentos):
     for dep in dict_departamentos.values():
         print(dep)
         for emple in dep.empleados.values():
-            print(emple)
+            print(f'\t{emple}')
     pausa()
 
 def opcion_3(dict_departamentos):
@@ -82,39 +82,54 @@ def opcion_5(dict_departamentos):
 def opcion_6(dict_departamentos):
     print('opcion 6')   
     dni_empleado = input('Ingrese el DNI del Empleado: ')
+    encuentra_emple = 0
     for depa in dict_departamentos.values():
         if dni_empleado in depa.empleados.keys():
-            print(f'{depa.nombre}: {depa.empleados[dni_empleado]}')
+            print(f'{depa.empleados[dni_empleado]}')
+            encuentra_emple += 1
+    if encuentra_emple == 0:
+        print(f'El empleado con DNI: {dni_empleado} no existe en la empresa.')
+
 
     pausa()
 
 def opcion_7(dict_departamentos):
     print('opcion 7')
     emple_dni = input('Ingrese DNI de Empleado a Modificar: ')
-    atributo = input('Ingrese atributo a modificar: ')
-    if atributo == 'dni':
-        print('El atributo DNI no se puede modificar.')
+    encuentra_dni = False
+    for depa in dict_departamentos.values():
+        if emple_dni in depa.empleados.keys():
+            encuentra_dni = True
+    if encuentra_dni == False:
+        print('El DNI no existe. Vuelva a intentarlo.')
     else:
-        valor = input(f'Ingrese nuevo valor para el atributo {atributo}: ')
-    if atributo in ['nombre', 'apellido', 'fecha_de_nacimiento', 'direccion', 'usuario', 'clave', 'activo', 'salario', 'horario']:
-        if atributo == 'salario':
-            valor = float(valor)
-        
-        for depa in dict_departamentos.values():
-            if emple_dni in depa.empleados.keys():
-                setattr(depa.empleados[emple_dni], atributo, valor)
-                print(f'Empleado modificado correctamente en el departamento {depa.nombre}')
+        atributo = input('Ingrese atributo a modificar: ')
+        if atributo == 'dni':
+            print('El atributo DNI no se puede modificar.')
+        else:
+            valor = input(f'Ingrese nuevo valor para el atributo {atributo}: ')
+        if atributo in ['nombre', 'apellido', 'fecha_de_nacimiento', 'direccion', 'usuario', 'clave', 'activo', 'salario', 'horario']:
+            if atributo == 'salario':
+                valor = float(valor)
+            
+            for depa in dict_departamentos.values():
+                if emple_dni in depa.empleados.keys():
+                    setattr(depa.empleados[emple_dni], atributo, valor)
+                    print(f'Empleado modificado correctamente en el departamento {depa.nombre}')
     pausa()
 
 def opcion_8(dict_departamentos):
     print('opcion 8')
     dni_empleado = input('Ingrese el DNI del Empleado a ELIMINAR: ')
+    encuentra_depto = 0
     for depa in dict_departamentos.values():
         if dni_empleado in depa.empleados.keys():
             emple_eliminado = depa.empleados.pop(dni_empleado)
+            encuentra_depto += 1
             print(f'Empleado {emple_eliminado.nombre} eliminado del departamento {depa.nombre}')
-        else:
-            print('El empleado no existe en la empresa.')
+    if encuentra_depto == 0:
+        print(f'El empleado con DNI: {dni_empleado} no existe en la empresa.')
+
     pausa()
 
 
@@ -135,7 +150,7 @@ def main():
         obj_departamento = Departamento(fila[0].upper(), fila[1])
         if not obj_departamento.nombre in gerencia.departamentos.keys():
             gerencia.departamentos[obj_departamento.nombre] = obj_departamento
-    print(gerencia.departamentos)
+    # print(gerencia.departamentos)
     # Cierre del fichero (debe ser luego de la transormacion del archivo).
     fichero_departamentos.close()
 
@@ -149,7 +164,7 @@ def main():
 
     salida = True
     while salida == True:
-        system('clear') # system('cls') 
+        system('cls') # system('cls') 
 
         print('--- TITULO MENU ---')
         print('1. opcion - Departamento - Create ')

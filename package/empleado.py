@@ -11,4 +11,4 @@ class Empleado(Persona, Usuario):
         self.departamento = departamento
 
     def __str__(self):
-        return f'Empleado: {self.nombre} {self.apellido}\nSalario: {self.salario}'
+        return f'Empleado: {self.nombre} {self.apellido}\n\tDepartamento: {self.departamento}\n\tSalario: {self.salario}\n'
