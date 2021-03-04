@@ -42,6 +42,9 @@ def opcion_3(dict_departamentos):
             if atributo in ['nombre', 'telefono']:
                 valor = input(f'Ingrese el nuevo valor para {atributo}: ')
                 if atributo == 'nombre':
+                    # Se le asigna el nuevo departamento a los que existían en el modificado
+                    for emple in dict_departamentos[nombre_departamento].empleados.values():
+                        emple.departamento = valor
                     dep_eliminado = dict_departamentos.pop(nombre_departamento)
                     dict_departamentos[valor] = dep_eliminado
                     setattr(dict_departamentos[valor], atributo, valor)
@@ -143,9 +146,9 @@ def main():
     fichero_departamentos = open(path + 'departamentos.csv', 'r', encoding='utf-8')
     fichero_empleados = open(path + 'empleados.csv', 'r', encoding='utf-8')
 
+    #% INICIO: CARGA DE DEPARTAMENTOS
     # Transformación del archivo csv a lineas de listas
     lectura_departamentos = csv.reader(fichero_departamentos)
-    #% CREACION DE DEPARTAMENTOS
     for fila in lectura_departamentos:
         obj_departamento = Departamento(fila[0].upper(), fila[1])
         if not obj_departamento.nombre in gerencia.departamentos.keys():
@@ -153,13 +156,17 @@ def main():
     # print(gerencia.departamentos)
     # Cierre del fichero (debe ser luego de la transormacion del archivo).
     fichero_departamentos.close()
+    #% FIN: CARGA DE DEPARTAMENTOS
 
-    #% CREACION DE EMPLEADOS
+    #% INICIO: CARGA DE EMPLEADOS
+    # Transformación del archivo csv a lineas de listas
     lectura_empleados = csv.reader(fichero_empleados)
     for fila in lectura_empleados:
         obj_empleado = Empleado(fila[0], fila[1], fila[2], fila[4], fila[3], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10])
         if obj_empleado.departamento in gerencia.departamentos.keys():
             gerencia.departamentos[obj_empleado.departamento].empleados[obj_empleado.dni] = obj_empleado
+    fichero_empleados.close()
+    #% FIN: CARGA EMPLEADOS
 
 
     salida = True
@@ -194,5 +201,31 @@ def main():
             print('la opcion seleccionada no se encuentra dispobible, intente nuevamente')
             pausa()
 
+
+    #% INICIO: ESCRITURA DEPARTAMENTOS
+    with open(path + 'departamentos_AUX.csv', 'w') as fichero_departamentos_2:
+
+        primera_linea = True
+        for depa in gerencia.departamentos.values():
+            if primera_linea == True:
+                fichero_departamentos_2.write(f'{depa.nombre},{depa.telefono}')
+                primera_linea = False
+            else:
+                fichero_departamentos_2.write(f'\n{depa.nombre},{depa.telefono}')
+    #% FIN: ESCRITURA DEPARTAMENTOS
+
+
+    #% INICIO: ESCRITURA EMPLEADOS
+    with open(path + 'empleados_AUX.csv', 'w', encoding='utf-8') as fichero_departamentos_2:
+
+        primera_linea = True
+        for depa in gerencia.departamentos.values():
+            for emple in depa.empleados.values():
+                if primera_linea == True:
+                    fichero_departamentos_2.write(f'{emple.nombre},{emple.apellido},{emple.fecha_nacimiento},{emple.direccion},{emple.dni},{emple.email},{emple.clave},{emple.activo},{emple.salario},{emple.horario},{emple.departamento}')
+                    primera_linea = False
+                else:
+                    fichero_departamentos_2.write(f'\n{emple.nombre},{emple.apellido},{emple.fecha_nacimiento},{emple.direccion},{emple.dni},{emple.email},{emple.clave},{emple.activo},{emple.salario},{emple.horario},{emple.departamento}')
+    #% FIN: ESCRITURA EMPLEADOS
 
 main()
